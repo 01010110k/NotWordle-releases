@@ -1,0 +1,8 @@
+# Only CI plumbing lives in git; the Xcode project is downloaded by
+# ci_scripts/ci_post_clone.sh at build time (and extracted here locally
+# for the one-time Xcode Cloud workflow setup on a Mac).
+/*
+!/.gitignore
+!/README.md
+!/build.env
+!/ci_scripts
