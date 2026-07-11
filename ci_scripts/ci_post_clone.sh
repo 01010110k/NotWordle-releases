@@ -20,4 +20,10 @@ rm -rf /tmp/export /tmp/export.zip
 # TestFlight requires a strictly increasing CFBundleVersion; Xcode Cloud's build
 # number already is one, so stamp it over whatever the export shipped with.
 /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $CI_BUILD_NUMBER" Info.plist
+
+# Export-compliance: standard HTTPS/TLS only = exempt. The Unity export already sets
+# this (IosBuildPostProcess.cs); stamping it here too protects against export-side
+# regressions. If the app ever adds custom crypto, flip to true + file compliance docs.
+/usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" Info.plist 2>/dev/null \
+  || /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" Info.plist
 echo "Ready: $(ls Unity-iPhone.xcodeproj >/dev/null && echo project ok), CFBundleVersion=$CI_BUILD_NUMBER"
